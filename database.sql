@@ -60,8 +60,8 @@ CREATE TABLE IF NOT EXISTS order_items (
 
 -- Insert Dummy Data (Password for both is 'password123' using password_hash)
 INSERT INTO users (name, username, email, is_verified, password, role) VALUES 
-('Administrator', 'admin', 'admin@warungku.com', 1, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-('Customer Satu', 'customer1', 'customer1@warungku.com', 1, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'customer');
+('Administrator', 'admin', 'admin@warungku.com', 1, '$2y$10$cGRg56cdtvPtcuS3GlWrt./cH0GEZ6UBDveilWbUu6j7NLQVYHbBO', 'admin'),
+('Customer Satu', 'customer1', 'customer1@warungku.com', 1, '$2y$10$cGRg56cdtvPtcuS3GlWrt./cH0GEZ6UBDveilWbUu6j7NLQVYHbBO', 'customer');
 
 INSERT INTO categories (name, slug, icon) VALUES 
 ('Sembako', 'sembako', 'fa-box'),
