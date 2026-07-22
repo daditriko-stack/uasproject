@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
-session_start();
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin'){
-    header("Location: /uasproject/auth/login.php");
+    header("Location: " . base_url('auth/login.php'));
     exit;
 }
 
@@ -23,7 +22,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt->execute([$id]);
             $_SESSION['flash'] = ['type' => 'success', 'message' => 'Kategori berhasil dihapus.'];
         }
-        header("Location: /uasproject/admin/categories.php");
+        header("Location: " . base_url('admin/categories.php'));
         exit;
     }
 }
@@ -40,10 +39,13 @@ require_once __DIR__ . '/../templates/header.php';
             <div style="background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border);">
                 <h3 style="margin-bottom: 1.5rem; color: var(--secondary);">Menu Admin</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <a href="/uasproject/admin/index.php" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-gauge-high" style="width: 25px;"></i> Dashboard</a>
-                    <a href="/uasproject/admin/products.php" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-box" style="width: 25px;"></i> Produk</a>
-                    <a href="/uasproject/admin/categories.php" style="padding: 0.75rem; border-radius: 8px; background: var(--primary); color: white;"><i class="fa-solid fa-tags" style="width: 25px;"></i> Kategori</a>
-                    <a href="/uasproject/admin/orders.php" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-clipboard-list" style="width: 25px;"></i> Pesanan</a>
+                    <a href="<?= base_url('admin/index.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-gauge-high" style="width: 25px;"></i> Dashboard</a>
+                    <a href="<?= base_url('admin/products.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-box" style="width: 25px;"></i> Produk</a>
+                    <a href="<?= base_url('admin/categories.php') ?>" style="padding: 0.75rem; border-radius: 8px; background: var(--primary); color: white;"><i class="fa-solid fa-tags" style="width: 25px;"></i> Kategori</a>
+                    <a href="<?= base_url('admin/orders.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-clipboard-list" style="width: 25px;"></i> Pesanan</a>
+                    <a href="<?= base_url('admin/reports.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-chart-line" style="width: 25px;"></i> Laporan</a>
+                    <a href="<?= base_url('admin/backup.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-database" style="width: 25px;"></i> Backup</a>
+                    <a href="<?= base_url('admin/email_logs.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-envelope" style="width: 25px;"></i> Log Email</a>
                 </div>
             </div>
         </aside>

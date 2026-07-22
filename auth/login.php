@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../templates/header.php';
+require_once __DIR__ . '/../config/db.php';
 
 if(isset($_SESSION['user_id'])){
-    header("Location: /uasproject/index.php");
+    header("Location: " . base_url('index.php'));
     exit;
 }
 
@@ -10,28 +10,43 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
 
-    if($user && password_verify($password, $user['password'])){
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['name'] = $user['name'];
-        $_SESSION['role'] = $user['role'];
-        
-        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Selamat datang kembali, ' . htmlspecialchars($user['name'])];
-        
-        if($user['role'] === 'admin'){
-            header("Location: /uasproject/admin/index.php");
+        if($user && password_verify($password, $user['password'])){
+            // Cek verifikasi email — admin dibebaskan dari kewajiban verifikasi
+            if(!$user['is_verified'] && $user['role'] !== 'admin'){
+                $error = "Email Anda belum diverifikasi. "
+                       . "Silakan cek kotak masuk email Anda atau "
+                       . "<a href='" . base_url('auth/resend-verification.php') . "' style='color: white; font-weight: bold; text-decoration: underline;'>klik di sini untuk kirim ulang</a>.";
+            } else {
+                $_SESSION['user_id']      = $user['id'];
+                $_SESSION['username']     = $user['username'];
+                $_SESSION['name']         = $user['name'];
+                $_SESSION['role']         = $user['role'];
+                $_SESSION['is_verified']  = $user['is_verified'] ?? 0;
+
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Selamat datang kembali, ' . htmlspecialchars($user['name'])];
+
+                if($user['role'] === 'admin'){
+                    header("Location: " . base_url('admin/index.php'));
+                } else {
+                    header("Location: " . base_url('index.php'));
+                }
+                exit;
+            }
         } else {
-            header("Location: /uasproject/index.php");
+            $error = "Username atau Password salah!";
         }
-        exit;
-    } else {
-        $error = "Username atau Password salah!";
+    } catch (PDOException $e) {
+        $error = "Kesalahan sistem: Tidak dapat terhubung ke database. Silakan coba lagi.";
+        error_log("Login Error: " . $e->getMessage());
     }
 }
+
+require_once __DIR__ . '/../templates/header.php';
 ?>
 
 <div class="container">
@@ -47,8 +62,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <!-- Google SSO -->
         <script src="https://accounts.google.com/gsi/client" async defer></script>
         <div id="g_id_onload"
-             data-client_id="ISI_DENGAN_CLIENT_ID_GOOGLE_ANDA.apps.googleusercontent.com"
-             data-login_uri="http://localhost/uasproject/auth/sso_callback.php"
+             data-client_id="648814225183-m0i3br2tchsafbut2favsm5kmhrr9i8m.apps.googleusercontent.com"
+             data-login_uri="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . base_url('auth/sso_callback.php') ?>"
              data-auto_prompt="false">
         </div>
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left" style="display: flex; justify-content: center; margin-bottom: 1.5rem;"></div>
@@ -64,13 +79,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <input type="text" name="username" class="form-control" required placeholder="Masukkan username">
             </div>
             <div class="form-group">
-                <label>Password</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <label style="margin-bottom: 0;">Password</label>
+                    <a href="<?= base_url('auth/forgot-password.php') ?>" style="color: var(--primary); font-size: 0.85rem; font-weight: 600;">Lupa Password?</a>
+                </div>
                 <input type="password" name="password" class="form-control" required placeholder="Masukkan password">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Masuk</button>
         </form>
         <p style="text-align: center; margin-top: 1.5rem;">
-            Belum punya akun? <a href="/uasproject/auth/register.php" style="color: var(--primary); font-weight: 600;">Daftar Sekarang</a>
+            Belum punya akun? <a href="<?= base_url('auth/register.php') ?>" style="color: var(--primary); font-weight: 600;">Daftar Sekarang</a>
         </p>
     </div>
 </div>

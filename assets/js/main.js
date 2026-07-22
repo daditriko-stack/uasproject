@@ -56,6 +56,44 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Dark Mode Logic
+    const toggleBtn = document.getElementById('theme-toggle');
+    const htmlTag = document.documentElement;
+
+    // Check stored preference
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+        htmlTag.setAttribute('data-theme', storedTheme);
+        updateThemeIcon(storedTheme);
+    } else {
+        // Check system preference
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(prefersDark) {
+            htmlTag.setAttribute('data-theme', 'dark');
+            updateThemeIcon('dark');
+        }
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlTag.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlTag.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
+
+    function updateThemeIcon(theme) {
+        if(toggleBtn) {
+            if(theme === 'dark') {
+                toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+        }
+    }
 });
 
 // Modal Functions

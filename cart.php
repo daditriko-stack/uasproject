@@ -50,7 +50,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             unset($_SESSION['cart'][$product_id]);
             $_SESSION['flash'] = ['type' => 'success', 'message' => 'Produk dihapus dari keranjang.'];
         }
-        header("Location: /uasproject/cart.php");
+        header("Location: " . base_url('cart.php'));
         exit;
     }
 }
@@ -66,7 +66,7 @@ require_once __DIR__ . '/templates/header.php';
             <i class="fa-solid fa-cart-arrow-down" style="font-size: 4rem; color: var(--border); margin-bottom: 1rem;"></i>
             <h3>Keranjang Anda kosong</h3>
             <p style="color: var(--text-muted); margin-bottom: 2rem;">Ayo mulai berbelanja kebutuhan Anda.</p>
-            <a href="/uasproject/products.php" class="btn btn-primary">Lihat Katalog</a>
+            <a href="<?= base_url('products.php') ?>" class="btn btn-primary">Lihat Katalog</a>
         </div>
     <?php else: ?>
         <div style="display: flex; gap: 2rem;">
@@ -113,7 +113,7 @@ require_once __DIR__ . '/templates/header.php';
                         <span>Total:</span>
                         <span><?= formatRupiah($total_all) ?></span>
                     </div>
-                    <a href="/uasproject/checkout.php" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 1.1rem; padding: 1rem;">Lanjut ke Pembayaran</a>
+                    <a href="<?= base_url('checkout.php') ?>" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 1.1rem; padding: 1rem;">Lanjut ke Pembayaran</a>
                 </div>
             </div>
         </div>

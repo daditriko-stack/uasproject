@@ -12,6 +12,15 @@
     --success: #10B981;
 }
 
+[data-theme="dark"] {
+    --bg-light: #0B0F19; /* Sleek dark blue/grey */
+    --bg-white: #111827; /* Dark gray */
+    --text-main: #F9FAFB; /* Off-white */
+    --text-muted: #9CA3AF;
+    --border: #374151; /* Dark border */
+    --secondary: #34D399; /* Emerald */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -26,6 +35,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 main {
@@ -150,7 +160,7 @@ a {
     max-width: 500px;
     margin: 0 auto;
     display: flex;
-    background: white;
+    background: var(--bg-white);
     padding: 0.5rem;
     border-radius: 12px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -190,7 +200,7 @@ a {
 }
 
 .product-card {
-    background: white;
+    background: var(--bg-white);
     border-radius: 16px;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
@@ -254,7 +264,7 @@ a {
     min-width: 300px;
     padding: 1rem;
     border-radius: 12px;
-    background: white;
+    background: var(--bg-white);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
@@ -277,7 +287,7 @@ a {
 
 /* Footer */
 footer {
-    background: white;
+    background: var(--bg-white);
     padding: 2rem;
     text-align: center;
     border-top: 1px solid var(--border);
@@ -317,7 +327,7 @@ footer {
 .auth-container {
     max-width: 400px;
     margin: 4rem auto;
-    background: white;
+    background: var(--bg-white);
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
@@ -341,7 +351,7 @@ footer {
     display: flex;
 }
 .modal-content {
-    background: white;
+    background: var(--bg-white);
     padding: 2rem;
     border-radius: 16px;
     width: 90%;

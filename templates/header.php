@@ -14,44 +14,51 @@ require_once __DIR__ . '/../config/db.php';
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/uasproject/assets/css/style.css">
+    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
 </head>
 <body>
 
 <nav class="navbar glass">
-    <a href="/uasproject/index.php" class="nav-brand">
+    <a href="<?= base_url('index.php') ?>" class="nav-brand">
         <i class="fa-solid fa-store"></i> WarungKu
     </a>
     
     <div class="nav-links">
-        <a href="/uasproject/index.php">Beranda</a>
-        <a href="/uasproject/products.php">Katalog</a>
+        <a href="<?= base_url('index.php') ?>">Beranda</a>
+        <a href="<?= base_url('products.php') ?>">Katalog</a>
         <a href="#">Kategori</a>
     </div>
 
     <div class="nav-actions">
+        <button id="theme-toggle" class="btn btn-outline" style="border: none; font-size: 1.25rem; padding: 0.5rem;"><i class="fa-solid fa-moon"></i></button>
         <?php
         $cartCount = isset($_SESSION['cart']) ? array_sum(array_column($_SESSION['cart'], 'quantity')) : 0;
         ?>
-        <a href="/uasproject/cart.php" class="btn btn-outline">
+        <a href="<?= base_url('cart.php') ?>" class="btn btn-outline">
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="badge" id="cart-badge"><?= $cartCount ?></span>
         </a>
         
         <?php if(isset($_SESSION['user_id'])): ?>
             <?php if($_SESSION['role'] === 'admin'): ?>
-                <a href="/uasproject/admin/index.php" class="btn btn-primary">Dashboard</a>
+                <a href="<?= base_url('admin/index.php') ?>" class="btn btn-primary">Dashboard</a>
             <?php else: ?>
-                <a href="/uasproject/profile.php" class="btn btn-primary"><i class="fa-solid fa-user"></i> <?= htmlspecialchars($_SESSION['name']) ?></a>
+                <a href="<?= base_url('profile.php') ?>" class="btn btn-primary"><i class="fa-solid fa-user"></i> <?= htmlspecialchars($_SESSION['name']) ?></a>
             <?php endif; ?>
-            <a href="/uasproject/auth/logout.php" class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <a href="<?= base_url('auth/logout.php') ?>" class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);"><i class="fa-solid fa-right-from-bracket"></i></a>
         <?php else: ?>
-            <a href="/uasproject/auth/login.php" class="btn btn-primary">Masuk</a>
+            <a href="<?= base_url('auth/login.php') ?>" class="btn btn-primary">Masuk</a>
         <?php endif; ?>
     </div>
 </nav>
 
 <main>
+    <?php if(isset($_SESSION['user_id']) && isset($_SESSION['is_verified']) && !$_SESSION['is_verified']): ?>
+        <div style="background: var(--accent); color: var(--secondary); text-align: center; padding: 0.75rem; font-weight: 500;">
+            <i class="fa-solid fa-circle-exclamation"></i> Email Anda belum diverifikasi. Beberapa fitur mungkin dibatasi. 
+            <a href="<?= base_url('auth/resend-verification.php') ?>" style="text-decoration: underline; font-weight: 700;">Kirim ulang email verifikasi</a>
+        </div>
+    <?php endif; ?>
     <!-- Tempat memunculkan flash message dari PHP ke JS Toast -->
     <?php if(isset($_SESSION['flash'])): ?>
         <script>

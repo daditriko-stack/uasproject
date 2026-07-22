@@ -66,23 +66,28 @@ $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
                     <?php foreach($products as $p): ?>
                     <div class="product-card">
                         <div class="product-image" style="padding: 0;">
-                            <img src="/uasproject/assets/images/<?= htmlspecialchars($p['image_url'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($p['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-image\'></i>';">
+                            <img src="<?= base_url('assets/images/' . htmlspecialchars($p['image_url'] ?? 'default.jpg')) ?>" alt="<?= htmlspecialchars($p['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-image\'></i>';">
                         </div>
                         <div class="product-info">
                             <div class="product-category"><?= htmlspecialchars($p['category_name']) ?></div>
                             <h3 class="product-title"><?= htmlspecialchars($p['name']) ?></h3>
                             <div class="product-price"><?= formatRupiah($p['price']) ?></div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.85rem; color: <?= $p['stock'] < 5 ? 'var(--danger)' : 'var(--text-muted)' ?>;">
-                                    Stok: <?= $p['stock'] ?>
-                                </span>
-                                <form method="POST" action="/uasproject/cart.php" style="margin: 0;">
-                                    <input type="hidden" name="action" value="add">
-                                    <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
-                                    <button type="submit" class="btn btn-outline" <?= $p['stock'] <= 0 ? 'disabled' : '' ?>>
-                                        <i class="fa-solid fa-cart-plus"></i>
-                                    </button>
-                                </form>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <div>
+                                    <span style="font-size: 0.85rem; color: <?= $p['stock'] < 5 ? 'var(--danger)' : 'var(--text-muted)' ?>;">
+                                        Stok: <?= $p['stock'] ?>
+                                    </span>
+                                    <form method="POST" action="<?= base_url('cart.php') ?>" style="margin-top: 0.25rem;">
+                                        <input type="hidden" name="action" value="add">
+                                        <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                                        <button type="submit" class="btn btn-outline" <?= $p['stock'] <= 0 ? 'disabled' : '' ?>>
+                                            <i class="fa-solid fa-cart-plus"></i> Tambah
+                                        </button>
+                                    </form>
+                                </div>
+                                <div style="text-align: right;">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=<?= urlencode(base_url('products.php?category=' . $p['category_id'] . '&q=' . $p['name'])) ?>" alt="QR" style="border-radius: 4px; border: 1px solid var(--border);">
+                                </div>
                             </div>
                         </div>
                     </div>

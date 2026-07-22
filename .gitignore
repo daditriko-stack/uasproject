@@ -1,0 +1,10 @@
+# Environment variables (Berisi password & API key sensitif)
+.env
+
+# Backups database & Log email
+backups/*.sql
+logs/*.log
+
+# Vendor & system files
+.DS_Store
+Thumbs.db

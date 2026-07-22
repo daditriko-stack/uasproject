@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['flash'] = ['type' => 'success', 'message' => 'Pendaftaran SSO berhasil!'];
                 }
                 
-                header("Location: /uasproject/index.php");
+                header("Location: " . base_url('index.php'));
                 exit;
             }
         }
@@ -52,5 +52,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $_SESSION['flash'] = ['type' => 'error', 'message' => 'Login SSO gagal!'];
-header("Location: /uasproject/auth/login.php");
+header("Location: " . base_url('auth/login.php'));
 exit;

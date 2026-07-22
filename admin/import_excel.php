@@ -3,7 +3,7 @@ require_once __DIR__ . '/../config/db.php';
 session_start();
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin'){
-    header("Location: /uasproject/auth/login.php");
+    header("Location: " . base_url('auth/login.php'));
     exit;
 }
 
@@ -44,5 +44,5 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])){
     }
 }
 
-header("Location: /uasproject/admin/products.php");
+header("Location: " . base_url('admin/products.php'));
 exit;

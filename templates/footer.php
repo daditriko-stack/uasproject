@@ -9,6 +9,6 @@
 <div id="toast-container" class="toast-container"></div>
 
 <!-- Custom JS -->
-<script src="/uasproject/assets/js/main.js"></script>
+<script src="<?= base_url('assets/js/main.js') ?>"></script>
 </body>
 </html>

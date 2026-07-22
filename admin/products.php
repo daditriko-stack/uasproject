@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
-session_start();
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin'){
-    header("Location: /uasproject/auth/login.php");
+    header("Location: " . base_url('auth/login.php'));
     exit;
 }
 
@@ -59,7 +58,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $stmt->execute([$id]);
             $_SESSION['flash'] = ['type' => 'success', 'message' => 'Produk berhasil dihapus.'];
         }
-        header("Location: /uasproject/admin/products.php");
+        header("Location: " . base_url('admin/products.php'));
         exit;
     }
 }
@@ -80,10 +79,13 @@ require_once __DIR__ . '/../templates/header.php';
             <div style="background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border);">
                 <h3 style="margin-bottom: 1.5rem; color: var(--secondary);">Menu Admin</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <a href="/uasproject/admin/index.php" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-gauge-high" style="width: 25px;"></i> Dashboard</a>
-                    <a href="/uasproject/admin/products.php" style="padding: 0.75rem; border-radius: 8px; background: var(--primary); color: white;"><i class="fa-solid fa-box" style="width: 25px;"></i> Produk</a>
-                    <a href="/uasproject/admin/categories.php" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-tags" style="width: 25px;"></i> Kategori</a>
-                    <a href="/uasproject/admin/orders.php" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-clipboard-list" style="width: 25px;"></i> Pesanan</a>
+                    <a href="<?= base_url('admin/index.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-gauge-high" style="width: 25px;"></i> Dashboard</a>
+                    <a href="<?= base_url('admin/products.php') ?>" style="padding: 0.75rem; border-radius: 8px; background: var(--primary); color: white;"><i class="fa-solid fa-box" style="width: 25px;"></i> Produk</a>
+                    <a href="<?= base_url('admin/categories.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-tags" style="width: 25px;"></i> Kategori</a>
+                    <a href="<?= base_url('admin/orders.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-clipboard-list" style="width: 25px;"></i> Pesanan</a>
+                    <a href="<?= base_url('admin/reports.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-chart-line" style="width: 25px;"></i> Laporan</a>
+                    <a href="<?= base_url('admin/backup.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-database" style="width: 25px;"></i> Backup</a>
+                    <a href="<?= base_url('admin/email_logs.php') ?>" style="padding: 0.75rem; border-radius: 8px; color: var(--text-main);"><i class="fa-solid fa-envelope" style="width: 25px;"></i> Log Email</a>
                 </div>
             </div>
         </aside>
@@ -94,8 +96,8 @@ require_once __DIR__ . '/../templates/header.php';
                 <h2 class="section-title" style="margin-bottom: 0;">Manajemen Produk</h2>
                 <div style="display: flex; gap: 0.5rem;">
                     <button onclick="openModal('importExcelModal')" class="btn btn-outline" style="border-color: var(--success); color: var(--success);"><i class="fa-solid fa-file-import"></i> Import</button>
-                    <a href="/uasproject/admin/export_excel.php?type=products" class="btn btn-outline" style="border-color: var(--success); color: var(--success);"><i class="fa-solid fa-file-excel"></i> Excel</a>
-                    <a href="/uasproject/admin/export_word.php?type=products" class="btn btn-outline" style="border-color: #2563EB; color: #2563EB;"><i class="fa-solid fa-file-word"></i> Word</a>
+                    <a href="<?= base_url('admin/export_excel.php?type=products') ?>" class="btn btn-outline" style="border-color: var(--success); color: var(--success);"><i class="fa-solid fa-file-excel"></i> Excel</a>
+                    <a href="<?= base_url('admin/export_word.php?type=products') ?>" class="btn btn-outline" style="border-color: #2563EB; color: #2563EB;"><i class="fa-solid fa-file-word"></i> Word</a>
                     <button onclick="exportToPDF()" class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                     <button onclick="openModal('addProductModal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Tambah Produk</button>
                 </div>
@@ -109,6 +111,7 @@ require_once __DIR__ . '/../templates/header.php';
                             <th style="padding: 1rem; text-align: left;">Kategori</th>
                             <th style="padding: 1rem; text-align: right;">Harga</th>
                             <th style="padding: 1rem; text-align: center;">Stok</th>
+                            <th style="padding: 1rem; text-align: center;">QR Code</th>
                             <th class="no-print" style="padding: 1rem; text-align: center;">Aksi</th>
                         </tr>
                     </thead>
@@ -120,6 +123,9 @@ require_once __DIR__ . '/../templates/header.php';
                             <td style="padding: 1rem; text-align: right;"><?= formatRupiah($p['price']) ?></td>
                             <td style="padding: 1rem; text-align: center;">
                                 <span class="badge" style="background: <?= $p['stock'] < 5 ? 'var(--danger)' : 'var(--success)' ?>;"><?= $p['stock'] ?></span>
+                            </td>
+                            <td style="padding: 1rem; text-align: center;">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=40x40&data=<?= urlencode(base_url('products.php?category=' . $p['category_id'] . '&q=' . $p['name'])) ?>" alt="QR" style="border-radius: 4px; border: 1px solid var(--border);">
                             </td>
                             <td class="no-print" style="padding: 1rem; text-align: center;">
                                 <button onclick="editProduct(<?= htmlspecialchars(json_encode($p)) ?>)" class="btn btn-outline" style="border-color: var(--accent); color: var(--accent); padding: 0.25rem 0.5rem;"><i class="fa-solid fa-pen"></i></button>
@@ -236,7 +242,7 @@ require_once __DIR__ . '/../templates/header.php';
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal('importExcelModal')">&times;</span>
         <h3 style="margin-bottom: 1.5rem;">Import Data Produk (CSV)</h3>
-        <form method="POST" action="/uasproject/admin/import_excel.php" enctype="multipart/form-data">
+        <form method="POST" action="<?= base_url('admin/import_excel.php') ?>" enctype="multipart/form-data">
             <div class="form-group">
                 <label>Pilih File CSV</label>
                 <input type="file" name="file" class="form-control" accept=".csv" required>
