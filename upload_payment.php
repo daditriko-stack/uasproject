@@ -91,11 +91,11 @@ require_once __DIR__ . '/templates/header.php';
         
         <?php if($order['payment_method'] === 'qris'): ?>
         <div style="text-align: center; margin-bottom: 2rem;">
-            <p style="margin-bottom: 1rem;">Silakan scan QRIS di bawah ini dengan aplikasi e-wallet atau m-banking Anda.</p>
-            <div style="background: #e5e7eb; width: 200px; height: 200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
-                <i class="fas fa-qrcode" style="font-size: 5rem; color: #9ca3af;"></i>
+            <p style="margin-bottom: 1rem; font-weight: 500;">Silakan scan QRIS di bawah ini dengan aplikasi e-wallet atau m-banking Anda:</p>
+            <div style="background: white; padding: 1rem; display: inline-block; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <img src="<?= base_url('assets/images/qris.jpg') ?>" alt="Scan QRIS WarungKu" style="width: 240px; height: 240px; object-fit: contain; border-radius: 8px;">
             </div>
-            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">(Contoh Gambar QRIS Toko)</p>
+            <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">Pastikan nominal transfer sesuai dengan total tagihan pesanan Anda.</p>
         </div>
         <?php elseif($order['payment_method'] === 'transfer'): ?>
         <div style="background: #e0f2fe; color: #0284c7; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
